@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"; // Link එක import කළා
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,51 +6,58 @@ import { MapPin, Star } from "lucide-react";
 
 const HotelCard = ({ hotel }) => {
   return (
-    <Link to={`/hotel/${hotel._id}`} className="block h-full">
-      <Card className="h-full overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 border-none shadow-md flex flex-col">
-        {/* Image Section */}
-        <div className="relative aspect-[4/3] overflow-hidden">
+    <Link to={`/hotel/${hotel._id}`} className="block h-full select-none">
+      {/* 
+         FIX 1: h-[420px] - අපි කාඩ් එකට ස්ථිර උසක් දෙනවා.
+         FIX 2: select-none - Mouse එකෙන් අදිනකොට text select නොවෙන්න.
+      */}
+      <Card className="h-[420px] flex flex-col overflow-hidden group cursor-pointer border-none shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl dark:bg-slate-900 dark:border-slate-800">
+        
+        {/* Image Section - Fixed Height (h-48 = 192px) */}
+        <div className="relative h-48 w-full overflow-hidden shrink-0">
           <img
             src={hotel.imageUrls[0]}
             alt={hotel.name}
-            className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+            className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
           />
-          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center shadow-sm">
+          <div className="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center shadow-sm">
             <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 mr-1" />
-            <span className="text-sm font-bold text-slate-900">{hotel.starRating}</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white">{hotel.starRating}</span>
           </div>
         </div>
 
         {/* Content Section */}
-        <CardContent className="p-4 flex-grow">
-          <h3 className="text-xl font-bold text-slate-900 mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+        <CardContent className="p-4 flex flex-col flex-grow overflow-hidden">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-1 line-clamp-1 group-hover:text-primary transition-colors">
             {hotel.name}
           </h3>
-          <div className="flex items-center text-slate-500 mb-4">
+          <div className="flex items-center text-slate-500 dark:text-slate-400 mb-3">
             <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
             <span className="text-sm line-clamp-1">{hotel.city}, {hotel.country}</span>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {hotel.facilities.slice(0, 3).map((facility, index) => (
-              <Badge key={index} variant="secondary" className="font-normal text-xs bg-slate-100 text-slate-600">
+          
+          {/* 
+             FIX 3: Facilities Container Fixed Height 
+             h-14 දාලා overflow hidden කරනවා. එතකොට පේළි ගොඩක් ගියත් කාඩ් එක දික් වෙන්නේ නෑ.
+          */}
+          <div className="flex flex-wrap gap-2 h-14 content-start overflow-hidden">
+            {hotel.facilities.map((facility, index) => (
+              <Badge key={index} variant="secondary" className="font-normal text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 {facility}
               </Badge>
             ))}
-            {hotel.facilities.length > 3 && (
-              <span className="text-xs text-slate-400 self-center">+{hotel.facilities.length - 3} more</span>
-            )}
           </div>
         </CardContent>
 
-        {/* Footer / Price Section */}
-        <CardFooter className="p-4 pt-0 flex justify-between items-center border-t border-slate-100 mt-auto bg-slate-50/50">
-          <div className="flex flex-col pt-3">
-            <span className="text-xs text-slate-500">Start from</span>
+        {/* Footer / Price Section - Fixed at Bottom */}
+        <CardFooter className="p-4 pt-0 flex justify-between items-center border-t border-slate-100 dark:border-slate-800 mt-auto bg-slate-50/50 dark:bg-slate-900/50 h-16 shrink-0">
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-500 dark:text-slate-400">Start from</span>
             <span className="text-lg font-bold text-primary">
               ${hotel.pricePerNight} <span className="text-sm text-slate-400 font-normal">/ night</span>
             </span>
           </div>
-          <Button className="mt-3 group-hover:bg-primary/90">View Details</Button>
+          <Button size="sm" className="group-hover:bg-primary/90">View</Button>
         </CardFooter>
       </Card>
     </Link>
