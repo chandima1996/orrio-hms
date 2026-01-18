@@ -1,21 +1,22 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Hotel, Sun, Moon, DollarSign } from "lucide-react";
+import { Menu, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 import { useSettings } from "@/context/SettingsContext";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { theme, toggleTheme, currency, toggleCurrency } = useSettings();
   const { user } = useUser();
+  const location = useLocation();
 
-  // Scroll effect logic
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -30,133 +31,109 @@ const Header = () => {
     { name: "Contact", path: "/contact" },
   ];
 
+  // Logic: Scroll කරලා නැත්නම් Transparent. Scroll කළාම Blur වෙනවා.
+  const isTransparent = !isScrolled;
+
+  // Text Colors
+  const textColorClass = isTransparent 
+    ? "text-white hover:text-white/80" 
+    : "text-slate-700 dark:text-slate-200 hover:text-primary";
+
+  // Button Styles
+  const buttonClass = isTransparent
+    ? "text-white border-white/30 hover:bg-white/10"
+    : "text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800";
+
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm py-4"
-          : "bg-transparent py-6"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
+        !isTransparent
+          ? "bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-slate-200 dark:border-slate-800 py-4 shadow-sm"
+          : "bg-transparent border-white/5 py-6"
       }`}
     >
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
-            <Hotel className="h-8 w-8 text-primary" />
+      <div className="container flex items-center justify-between px-4 mx-auto">
+        
+        <Link to="/" className="transition-opacity hover:opacity-90">
+          <div className={isTransparent ? "drop-shadow-lg" : ""}>
+             <BrandLogo className="text-3xl md:text-4xl" />
           </div>
-          <span className="text-3xl font-extrabold tracking-tighter bg-gradient-to-r from-blue-700 via-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent drop-shadow-sm">
-            Orrio
-          </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* Desktop Nav */}
+        <nav className="items-center hidden gap-8 md:flex">
           {navLinks.map((item) => (
             <Link
               key={item.name}
               to={item.path}
-              className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors relative group"
+              className={`text-sm font-bold transition-all tracking-wide relative group ${textColorClass}`}
             >
               {item.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+              <span className={`absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-primary'}`} />
             </Link>
           ))}
 
           <SignedIn>
-            <Link to="/dashboard/user" className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-primary">
-              My Dashboard
+            <Link to="/dashboard/user" className={`text-sm font-bold ${textColorClass}`}>
+              Dashboard
             </Link>
             {isAdmin && (
-              <Link to="/dashboard/admin" className="text-sm font-bold text-red-500 hover:text-red-600">
-                Admin Panel
+              <Link to="/dashboard/admin" className="text-sm font-bold text-red-500 hover:text-red-600 drop-shadow-md">
+                Admin
               </Link>
             )}
           </SignedIn>
         </nav>
 
-        {/* Right Side Actions */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* Currency Toggle */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleCurrency} 
-            className="rounded-full text-white hover:bg-accent hover:text-accent-foreground"
-          >
-            <span className="font-bold text-sm">{currency}</span>
+        {/* Actions */}
+        <div className="items-center hidden gap-3 md:flex">
+          <Button variant="outline" size="sm" onClick={toggleCurrency} className={`rounded-full font-bold bg-transparent transition-all border ${buttonClass}`}>
+            {currency}
           </Button>
 
-          {/* Theme Toggle */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleTheme} 
-            className="rounded-full text-foreground hover:bg-accent hover:text-accent-foreground transition-transform active:rotate-90"
-          >
-             {theme === 'light' ? (
-                <Moon className="w-5 h-5" />
-             ) : (
-                <Sun className="w-5 h-5 text-yellow-400" />
-             )}
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className={`rounded-full transition-all ${buttonClass}`}>
+             {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className={`w-5 h-5 ${isTransparent ? "text-white" : "text-yellow-500"}`} />}
           </Button>
 
-          {/* Auth Buttons */}
           <SignedOut>
             <SignInButton mode="modal">
-                <Button className="rounded-full px-6 font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-md transition-transform hover:scale-105">
+                <Button className={`rounded-full px-6 font-bold shadow-lg transition-transform hover:scale-105 ${
+                    !isTransparent 
+                        ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900" 
+                        : "bg-white text-slate-900 hover:bg-slate-100"
+                }`}>
                     Sign In
                 </Button>
             </SignInButton>
           </SignedOut>
 
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
+          <SignedIn><UserButton afterSignOutUrl="/" /></SignedIn>
         </div>
 
-        {/* Mobile Menu (Hamburger) */}
-        <div className="md:hidden flex items-center gap-2">
-            <SignedIn>
-                <UserButton />
-            </SignedIn>
-            
+        {/* Mobile Menu */}
+        <div className="flex items-center gap-2 md:hidden">
+            <SignedIn><UserButton /></SignedIn>
             <Sheet>
                 <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-foreground">
-                    <Menu className="h-6 w-6" />
+                <Button variant="ghost" size="icon" className={isTransparent ? "text-white" : "text-foreground"}>
+                    <Menu className="w-8 h-8" />
                 </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <nav className="flex flex-col gap-4 mt-8">
-                    {navLinks.map((item) => (
-                    <Link key={item.name} to={item.path} className="text-lg font-medium py-2 border-b border-border">
-                        {item.name}
-                    </Link>
-                    ))}
-                    
-                    <SignedIn>
-                        <Link to="/dashboard/user" className="text-lg font-medium py-2 border-b border-border">My Dashboard</Link>
-                        {isAdmin && <Link to="/dashboard/admin" className="text-lg font-bold text-red-500 py-2 border-b border-border">Admin Panel</Link>}
-                    </SignedIn>
-
-                    <div className="flex gap-4 mt-6">
-                        <Button variant="outline" onClick={toggleTheme} className="w-full flex gap-2">
-                            {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                            {theme === 'light' ? "Dark Mode" : "Light Mode"}
-                        </Button>
-                        <Button variant="outline" onClick={toggleCurrency} className="w-full">
-                            {currency}
-                        </Button>
-                    </div>
-
-                    <SignedOut>
-                        <SignInButton mode="modal">
-                            <Button className="w-full mt-4" size="lg">Sign In</Button>
-                        </SignInButton>
+                <SheetContent side="right" className="w-[300px] border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                  <div className="flex flex-col gap-6 mt-8">
+                      <nav className="flex flex-col gap-4">
+                          {navLinks.map((item) => (
+                          <Link key={item.name} to={item.path} className="text-lg font-medium text-slate-800 dark:text-slate-200">
+                              {item.name}
+                          </Link>
+                          ))}
+                      </nav>
+                      <SignedOut>
+                        <SignInButton mode="modal"><Button className="w-full font-bold">Sign In</Button></SignInButton>
                     </SignedOut>
-                </nav>
+                  </div>
                 </SheetContent>
             </Sheet>
         </div>

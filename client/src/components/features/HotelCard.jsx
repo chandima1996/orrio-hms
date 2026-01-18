@@ -1,66 +1,127 @@
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star } from "lucide-react";
+import { MapPin, Star, Heart, Wifi, Car, Utensils, Waves, Dumbbell, Coffee, Monitor } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
-const HotelCard = ({ hotel }) => {
+const getAmenityIcon = (name) => {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes("wifi")) return <Wifi className="w-3 h-3" />;
+  if (lowerName.includes("parking")) return <Car className="w-3 h-3" />;
+  if (lowerName.includes("food") || lowerName.includes("restaurant") || lowerName.includes("bar")) return <Utensils className="w-3 h-3" />;
+  if (lowerName.includes("pool")) return <Waves className="w-3 h-3" />;
+  if (lowerName.includes("gym")) return <Dumbbell className="w-3 h-3" />;
+  if (lowerName.includes("spa")) return <Coffee className="w-3 h-3" />;
+  return <Monitor className="w-3 h-3" />;
+};
+
+const HotelCard = ({ hotel, viewMode = "grid" }) => {
+  const { isSignedIn } = useUser();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: false }));
+  const formattedRating = Number(hotel.starRating).toFixed(1);
+
+  // Styles based on View Mode
+  const isList = viewMode === "list";
+  const cardClass = isList 
+    ? "flex flex-row h-[280px]" 
+    : "flex flex-col h-[450px]";
+  
+  const imageClass = isList 
+    ? "w-2/5 h-full" 
+    : "w-full h-56";
+
   return (
-    <Link to={`/hotel/${hotel._id}`} className="block h-full select-none">
-      {/* 
-         FIX 1: h-[420px] - අපි කාඩ් එකට ස්ථිර උසක් දෙනවා.
-         FIX 2: select-none - Mouse එකෙන් අදිනකොට text select නොවෙන්න.
-      */}
-      <Card className="h-[420px] flex flex-col overflow-hidden group cursor-pointer border-none shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl dark:bg-slate-900 dark:border-slate-800">
-        
-        {/* Image Section - Fixed Height (h-48 = 192px) */}
-        <div className="relative h-48 w-full overflow-hidden shrink-0">
-          <img
-            src={hotel.imageUrls[0]}
-            alt={hotel.name}
-            className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
-          />
-          <div className="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center shadow-sm">
-            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 mr-1" />
-            <span className="text-sm font-bold text-slate-900 dark:text-white">{hotel.starRating}</span>
-          </div>
-        </div>
+    <div className="relative w-full h-full group">
+      {isSignedIn && (
+        <button 
+          onClick={(e) => { e.preventDefault(); setIsFavorite(!isFavorite); }}
+          className="absolute z-20 p-2 transition-all rounded-full top-3 right-3 bg-white/20 backdrop-blur-md hover:bg-white/40 active:scale-95"
+        >
+          <Heart className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"}`} />
+        </button>
+      )}
 
-        {/* Content Section */}
-        <CardContent className="p-4 flex flex-col flex-grow overflow-hidden">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-1 line-clamp-1 group-hover:text-primary transition-colors">
-            {hotel.name}
-          </h3>
-          <div className="flex items-center text-slate-500 dark:text-slate-400 mb-3">
-            <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span className="text-sm line-clamp-1">{hotel.city}, {hotel.country}</span>
-          </div>
+      <Link to={`/hotel/${hotel._id}`} className="block w-full h-full select-none">
+        <Card className={`${cardClass} overflow-hidden border-none shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 dark:bg-slate-900 dark:border-slate-800 rounded-2xl`}>
           
-          {/* 
-             FIX 3: Facilities Container Fixed Height 
-             h-14 දාලා overflow hidden කරනවා. එතකොට පේළි ගොඩක් ගියත් කාඩ් එක දික් වෙන්නේ නෑ.
-          */}
-          <div className="flex flex-wrap gap-2 h-14 content-start overflow-hidden">
-            {hotel.facilities.map((facility, index) => (
-              <Badge key={index} variant="secondary" className="font-normal text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                {facility}
-              </Badge>
-            ))}
-          </div>
-        </CardContent>
+          {/* Image Slider */}
+          <div className={`relative overflow-hidden shrink-0 ${imageClass}`}>
+            <Carousel plugins={[plugin.current]} className="w-full h-full" opts={{ loop: true }}>
+              <CarouselContent className="h-full ml-0">
+                {hotel.imageUrls.map((img, idx) => (
+                  <CarouselItem key={idx} className="h-full pl-0">
+                    <img src={img} alt={`${hotel.name}`} className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105" />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+            
+            <div className="absolute z-10 flex items-center px-2 py-1 border rounded-lg shadow-sm top-3 left-3 bg-black/60 backdrop-blur-md border-white/10">
+              <Star className="w-3 h-3 mr-1 text-yellow-400 fill-yellow-400" />
+              <span className="text-xs font-bold text-white">{formattedRating}</span>
+            </div>
+            
+            {/* Price Overlay - REMOVED in List View as requested, kept in Grid view bottom-left of image only if you want, 
+                BUT based on your request "Price ekak display wenna ba", I will remove price overlay completely from here too 
+                OR if you only meant "remove price from list view footer", I will do that. 
+                Assuming "hotel card eke price ekak display wenna ba" means remove everywhere on the card: */}
+            
+            {/* Price removed completely based on request */}
 
-        {/* Footer / Price Section - Fixed at Bottom */}
-        <CardFooter className="p-4 pt-0 flex justify-between items-center border-t border-slate-100 dark:border-slate-800 mt-auto bg-slate-50/50 dark:bg-slate-900/50 h-16 shrink-0">
-          <div className="flex flex-col">
-            <span className="text-xs text-slate-500 dark:text-slate-400">Start from</span>
-            <span className="text-lg font-bold text-primary">
-              ${hotel.pricePerNight} <span className="text-sm text-slate-400 font-normal">/ night</span>
-            </span>
           </div>
-          <Button size="sm" className="group-hover:bg-primary/90">View</Button>
-        </CardFooter>
-      </Card>
-    </Link>
+
+          {/* Content */}
+          <CardContent className={`p-5 flex flex-col flex-grow overflow-hidden relative ${isList ? 'justify-between' : ''}`}>
+            
+            <div>
+              <h3 className="mb-2 text-xl font-bold transition-colors text-slate-900 dark:text-slate-100 group-hover:text-primary">
+                {hotel.name}
+              </h3>
+              <div className="flex items-center mb-4 text-slate-500 dark:text-slate-400">
+                <MapPin className="w-3.5 h-3.5 mr-1.5 text-primary/70" />
+                <span className="text-sm font-medium">{hotel.city}, {hotel.country}</span>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap content-start gap-2 overflow-hidden">
+              {hotel.facilities.slice(0, isList ? 6 : 4).map((facility, index) => (
+                <Badge key={index} variant="secondary" className="font-medium text-xs py-1 px-2.5 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700 flex items-center gap-1.5">
+                  {getAmenityIcon(facility)}
+                  {facility}
+                </Badge>
+              ))}
+            </div>
+
+            {isList && (
+               <p className="mt-3 text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{hotel.description}</p>
+            )}
+
+            {!isList && (
+              <div className="pt-4 mt-auto">
+                 <Button className="w-full font-bold text-white shadow-md bg-slate-900 dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200">
+                  View Details
+                </Button>
+              </div>
+            )}
+          </CardContent>
+
+          {/* List View Specific Footer Action (PRICE REMOVED) */}
+          {isList && (
+             <div className="p-5 flex flex-col justify-center items-center min-w-[180px] border-l border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <Button className="w-full font-bold text-white transition-transform shadow-md bg-slate-900 dark:bg-white dark:text-slate-900 hover:scale-105">
+                  View Details
+                </Button>
+             </div>
+          )}
+
+        </Card>
+      </Link>
+    </div>
   );
 };
 

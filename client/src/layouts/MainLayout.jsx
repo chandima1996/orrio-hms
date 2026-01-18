@@ -1,19 +1,21 @@
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer"; // 1. Footer Import එක තියෙනවද බලන්න
+import Footer from "@/components/layout/Footer";
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-background text-foreground transition-colors duration-300">
+    <div className="flex flex-col min-h-screen font-sans bg-background text-foreground selection:bg-primary selection:text-white">
       
-      {/* Header එක උඩින් */}
+      {/* Header එක Fixed නිසා එය අනිත් Content වලට උඩින් (Z-index) තියෙනවා */}
       <Header />
       
-      {/* Page Content එක මැදින් (flex-grow දාලා තියෙන්නේ Footer එක පල්ලෙහාට තල්ලු කරන්න) */}
-      <main className="flex-grow pt-20"> 
+      {/* 
+         FIX: අපි pt-20 අයින් කළා. දැන් හැම පිටුවකම Content එක පටන් ගන්නේ Screen එකේ උඩම කෙලවරෙන්.
+         එතකොට Navbar එක Background Image එක උඩට ලස්සනට Set වෙනවා.
+      */}
+      <main className="flex-grow pt-0"> 
         {children}
       </main>
 
-      {/* 2. Footer එක මෙන්න මෙතන තියෙන්නම ඕනේ */}
       <Footer />
       
     </div>

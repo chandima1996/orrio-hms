@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Navigation Hook
 import MainLayout from "@/layouts/MainLayout";
 import { Button } from "@/components/ui/button";
-import { Search, MapPin, Loader2 } from "lucide-react";
+import { Search, MapPin, Loader2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchHotels, searchHotelsAI } from "@/services/api";
-import { Skeleton } from "@/components/ui/skeleton";
-
+import { fetchHotels } from "@/services/api"; // searchHotelsAI මෙතනට ඕන නෑ දැන්
 
 // Features Import
 import FeaturedHotels from "@/components/features/FeaturedHotels";
@@ -13,6 +12,7 @@ import Testimonials from "@/components/features/Testimonials";
 import StatsSection from "@/components/features/StatsSection";
 
 const Home = () => {
+  const navigate = useNavigate(); // For redirecting to search page
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,7 +34,7 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Initial Data Load
+  // Initial Data Load (For Featured Hotels)
   useEffect(() => {
     loadAllHotels();
   }, []);
@@ -51,20 +51,15 @@ const Home = () => {
     }
   };
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) {
-      loadAllHotels();
-      return;
-    }
-    setLoading(true);
-    try {
-      const data = await searchHotelsAI(searchQuery);
-      setHotels(data);
-    } catch (error) {
-      console.log("Search failed:", error);
-    } finally {
-      setLoading(false);
-    }
+  // --- NEW SEARCH LOGIC ---
+  // API call කරන්නේ නෑ, URL එක මාරු කරනවා විතරයි.
+  const handleSearch = () => {
+    if (!searchQuery.trim()) return;
+    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
   };
 
   return (
@@ -80,19 +75,23 @@ const Home = () => {
             transition={{ duration: 1.5 }}
             className="absolute inset-0 z-0"
           >
-             <img src={heroImages[currentImageIndex]} alt="Hero" className="w-full h-full object-cover"/>
-             {/* Gradient Overlay for better text visibility */}
+             <img src={heroImages[currentImageIndex]} alt="Hero" className="object-cover w-full h-full"/>
+             {/* Gradient Overlay */}
              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-slate-900/10 dark:from-black/90 dark:via-black/70 dark:to-slate-900/40" />
           </motion.div>
         </AnimatePresence>
 
-        <div className="container mx-auto px-4 z-10 relative mt-16">
-          <div className="text-center max-w-4xl mx-auto space-y-6">
+        <div className="container relative z-10 px-4 mx-auto mt-16">
+          {/* Increased Gap: space-y-8 used instead of space-y-6 */}
+          <div className="max-w-4xl mx-auto space-y-8 text-center">
+            
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
-              <span className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium inline-block mb-4 shadow-lg">
+              <span className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium inline-block mb-6 shadow-lg">
                 ✨ AI-Powered Hotel Booking
               </span>
-              <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl">
+              
+              {/* Main Headline with more margin top */}
+              <h1 className="mt-4 text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl drop-shadow-xl">
                 Find your perfect stay <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200">
                   with AI Precision
@@ -101,24 +100,34 @@ const Home = () => {
             </motion.div>
 
             {/* Search Bar */}
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.6 }} className="mt-10 p-2 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl shadow-2xl max-w-3xl mx-auto flex flex-col md:flex-row gap-2 border border-white/20">
-              <div className="flex-1 flex items-center px-4 h-14 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-transparent focus-within:border-primary/50">
-                <MapPin className="text-slate-400 mr-3 h-5 w-5" />
-                <div className="flex flex-col items-start w-full">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.6 }} className="flex flex-col max-w-3xl gap-2 p-2 mx-auto mt-12 border shadow-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl md:flex-row border-white/20">
+              <div className="relative flex items-center flex-1 px-4 transition-colors border border-transparent h-14 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 focus-within:border-primary/50 group">
+                <MapPin className="w-5 h-5 mr-3 text-slate-400" />
+                <div className="flex flex-col items-start w-full pr-8">
                   <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Describe your dream stay</span>
                   <input 
                     type="text" 
                     placeholder="Ex: Cheap hotel in Galle with a pool" 
-                    className="bg-transparent border-none outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm w-full p-0 h-6 font-medium" 
+                    className="w-full h-6 p-0 text-sm font-medium bg-transparent border-none outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400" 
                     value={searchQuery} 
                     onChange={(e) => setSearchQuery(e.target.value)} 
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()} 
                   />
                 </div>
+                
+                {/* Clear Button */}
+                {searchQuery && (
+                  <button 
+                    onClick={clearSearch}
+                    className="absolute p-1 transition-colors rounded-full right-4 hover:bg-slate-200 dark:hover:bg-slate-600"
+                  >
+                    <X className="w-4 h-4 text-slate-500" />
+                  </button>
+                )}
               </div>
-              <Button size="lg" className="h-14 px-8 rounded-xl bg-primary hover:bg-primary/90 text-lg shadow-lg shadow-primary/25 transition-all active:scale-95" onClick={handleSearch} disabled={loading}>
-                {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Search className="mr-2 h-5 w-5" />}
-                {loading ? "Thinking..." : "Search"}
+              <Button size="lg" className="px-8 text-lg transition-all shadow-lg h-14 rounded-xl bg-primary hover:bg-primary/90 shadow-primary/25 active:scale-95" onClick={handleSearch}>
+                <Search className="w-5 h-5 mr-2" />
+                Search
               </Button>
             </motion.div>
           </div>
@@ -126,14 +135,15 @@ const Home = () => {
       </section>
 
       {/* --- FEATURED HOTELS --- */}
+      {/* searchQuery එක දැන් මෙතනට පාස් කරන්නේ නෑ, මොකද Search කළොත් වෙන පිටුවකට යන නිසා */}
       <FeaturedHotels 
         hotels={hotels} 
         loading={loading} 
-        searchQuery={searchQuery} 
-        onShowAll={loadAllHotels} 
+        searchQuery="" 
+        onShowAll={() => navigate('/search')} 
       />
 
-      {/* --- STATS SECTION (Animation) --- */}
+      {/* --- STATS SECTION --- */}
       <StatsSection />
 
       {/* --- TESTIMONIALS --- */}
