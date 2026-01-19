@@ -5,6 +5,7 @@ import BookingSuccess from "@/pages/BookingSuccess";
 import FindHotels from "@/pages/FindHotels";
 import About from "@/pages/About"; // Import
 import Contact from "@/pages/Contact"; // Import
+import BookingSummary from "./pages/BookingSummary";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
          <Route path="/booking-success" element={<BookingSuccess />} />
          <Route path="/about" element={<About />} /> {/* Route */}
          <Route path="/contact" element={<Contact />} /> {/* Route */}
+         <Route path="/booking-summary" element={<BookingSummary />} />
       </Routes>
     </BrowserRouter>
   );
