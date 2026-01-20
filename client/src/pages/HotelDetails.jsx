@@ -12,9 +12,9 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Autoplay from "embla-carousel-autoplay";
 import RoomCard from "@/components/features/RoomCard";
-import HotelMap from "@/components/features/HotelMap";
+import HotelMap from "@/components/features/HotelMap"; // Updated Map Component
 import ReservationModal from "@/components/features/ReservationModal";
-import RoomModal from "@/components/features/RoomModal"; // New Room Modal
+import RoomModal from "@/components/features/RoomModal";
 import { useSettings } from "@/context/SettingsContext"; 
 import { formatPrice } from "@/utils/formatPrice"; 
 import { toast } from "sonner";
@@ -238,8 +238,14 @@ const HotelDetails = () => {
                             </div>
                         </div>
                     </Card>
+                    
+                    {/* --- MAP SECTION --- */}
                     <div className="relative z-0 overflow-hidden border shadow-lg h-72 rounded-3xl border-slate-200 dark:border-slate-800">
-                        <HotelMap location={hotel.city} />
+                        <HotelMap 
+                            location={hotel.city} 
+                            lat={hotel.lat} // Pass Latitude
+                            lng={hotel.lng} // Pass Longitude
+                        />
                         <div className="absolute inset-0 flex items-center justify-center transition-colors pointer-events-none bg-black/20 hover:bg-black/10"><Button className="font-bold shadow-lg pointer-events-auto bg-white/90 text-slate-900 hover:bg-white"><Map className="w-4 h-4 mr-2" /> View on Map</Button></div>
                     </div>
                 </div>
@@ -247,7 +253,7 @@ const HotelDetails = () => {
             </div>
         </div>
 
-        
+        {/* Room Detail Popup */}
         <RoomModal 
             room={selectedRoom} 
             open={isRoomModalOpen} 
