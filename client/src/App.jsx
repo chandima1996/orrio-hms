@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
-import ScrollToTop from "@/components/ui/ScrollToTop"; // Import ScrollToTop
+import ScrollToTop from "@/components/ui/ScrollToTop"; 
 
 import Home from "@/pages/Home";
 import HotelDetails from "@/pages/HotelDetails";
@@ -19,7 +19,7 @@ import RoomDetails from "./pages/RoomDetails";
 function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop /> {/* මෙය හැම Route change එකකදීම උඩට Scroll කරයි */}
+      <ScrollToTop /> 
       
       <Routes>
          <Route path="/" element={<Home />} />

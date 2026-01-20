@@ -62,7 +62,7 @@ const RoomForm = ({ onSuccess }) => {
     try {
         const payload = {
             ...formData,
-            title: useCustomType ? customType : formData.title, // Use custom or selected
+            title: useCustomType ? customType : formData.title, 
             imageUrls: formData.imageUrls.split(",").map(url => url.trim()),
             price: Number(formData.price),
             maxPeople: Number(formData.maxPeople)

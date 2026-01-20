@@ -247,12 +247,12 @@ const HotelDetails = () => {
             </div>
         </div>
 
-        {/* Room Detail Popup */}
+        
         <RoomModal 
             room={selectedRoom} 
             open={isRoomModalOpen} 
             onClose={() => setIsRoomModalOpen(false)}
-            onSelect={() => setIsRoomModalOpen(false)} // Just close for now, user can click main reservation
+            onSelect={() => setIsRoomModalOpen(false)} 
         />
       </div>
     </MainLayout>

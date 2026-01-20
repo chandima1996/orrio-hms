@@ -5,12 +5,12 @@ import { ShieldCheck, Zap, Globe, Users, Star, Clock, Headphones, Award } from "
 const About = () => {
   return (
     <MainLayout>
-      {/* --- HERO SECTION --- */}
+     
       <div className="relative h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 transform scale-105 bg-fixed bg-center bg-cover"
              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }} />
         
-        {/* Modern Dark Overlay */}
+       
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-slate-900/90" />
 
         <div className="relative z-10 max-w-5xl px-4 pt-20 mx-auto space-y-8 text-center">
@@ -34,7 +34,7 @@ const About = () => {
         </div>
       </div>
 
-      {/* --- OUR STORY & MISSION --- */}
+     
       <section className="py-24 transition-colors bg-white dark:bg-slate-950">
         <div className="container px-4 mx-auto">
           <div className="grid items-center grid-cols-1 gap-20 lg:grid-cols-2">
@@ -70,7 +70,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* --- SERVICES GRID --- */}
+     
       <section className="py-24 bg-slate-50 dark:bg-slate-900/50">
         <div className="container px-4 mx-auto">
           <div className="mb-16 text-center">
@@ -103,7 +103,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* --- BIG BRAND FOOTER --- */}
       <section className="h-[50vh] bg-slate-900 dark:bg-black overflow-hidden relative flex items-center justify-center">
          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
          <motion.h1 

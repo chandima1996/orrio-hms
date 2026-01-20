@@ -34,24 +34,24 @@ const UserDashboard = () => {
   const { user, isLoaded } = useUser();
   const [activeTab, setActiveTab] = useState("bookings");
   
-  // Data States
+  
   const [hotels, setHotels] = useState([]); // Favorites
   const [bookings, setBookings] = useState([]); 
   const [loadingBookings, setLoadingBookings] = useState(true);
   
-  // Modal States
+  
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const [bookingToCancel, setBookingToCancel] = useState(null);
 
-  // Profile Form States
+  
   const [profileData, setProfileData] = useState({
     firstName: "", lastName: "", email: "", phone: "", address: "", idNumber: ""
   });
   const [passwordData, setPasswordData] = useState({ current: "", new: "", confirm: "" });
 
-  // --- 1. LOAD USER DATA ---
+ 
   useEffect(() => {
     if (user) {
       setProfileData({
@@ -66,7 +66,7 @@ const UserDashboard = () => {
     }
   }, [user]);
 
-  // Load Favorites (Mock for now)
+  
   useEffect(() => {
     const loadFavorites = async () => {
       const data = await fetchHotels();
@@ -75,7 +75,7 @@ const UserDashboard = () => {
     loadFavorites();
   }, []);
 
-  // --- 2. LOAD BOOKINGS FUNCTION ---
+  
   const loadBookings = async () => {
     if (user) {
       try {
@@ -89,9 +89,6 @@ const UserDashboard = () => {
     }
   };
 
-  // --- HANDLERS ---
-
-  // Cancel Flow
   const initiateCancel = (bookingId) => {
     setBookingToCancel(bookingId);
     setIsCancelDialogOpen(true);
@@ -144,8 +141,7 @@ const UserDashboard = () => {
   };
 
   const handlePasswordUpdate = () => {
-    // Password update needs Backend implementation with Clerk API usually, 
-    // strictly frontend check for demo:
+   
     if (passwordData.new !== passwordData.confirm) {
         alert("New passwords do not match");
         return;
@@ -215,7 +211,7 @@ const UserDashboard = () => {
                                         getFilteredBookings(status).map((booking) => (
                                             <div key={booking._id} className="flex flex-col gap-6 p-5 transition-all bg-white border shadow-sm md:flex-row dark:bg-slate-900 rounded-2xl border-slate-200 dark:border-slate-800 hover:shadow-lg">
                                                 
-                                                {/* Image Handling */}
+                                               
                                                 <img 
                                                     src={booking.roomId?.imageUrls?.[0] || booking.hotelId?.imageUrls?.[0] || ""} 
                                                     alt="Booking" 

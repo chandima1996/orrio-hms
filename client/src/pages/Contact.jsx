@@ -8,18 +8,18 @@ import { Mail, MapPin, Phone, Clock, Send } from "lucide-react";
 const Contact = () => {
   return (
     <MainLayout>
-      {/* --- HERO SECTION --- */}
+     
       <div className="relative flex items-center justify-center min-h-screen pt-20 overflow-hidden">
         <div 
           className="absolute inset-0 bg-fixed bg-center bg-cover"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069')" }}
         />
-        {/* Dark Overlay with Blur at bottom */}
+        
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-slate-950" />
 
         <div className="container z-10 grid items-center grid-cols-1 gap-12 px-4 mx-auto lg:grid-cols-2">
           
-          {/* Text Info */}
+         
           <div className="space-y-8">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
               <h1 className="mb-6 text-5xl font-extrabold leading-tight tracking-tight text-white md:text-7xl">
@@ -56,7 +56,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Glass Form */}
+         
           <motion.div 
              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}
              className="p-8 border shadow-2xl bg-white/10 backdrop-blur-xl md:p-10 rounded-3xl border-white/20"
@@ -90,7 +90,7 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* --- BIG BRAND FOOTER --- */}
+     
       <section className="relative flex items-center justify-center py-20 overflow-hidden border-t bg-slate-900 dark:bg-black border-white/5">
          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
          <motion.h1 

@@ -76,7 +76,7 @@ const RoomModal = ({ room, open, onClose, onSelect }) => {
                 </div>
             </div>
 
-            {/* Action Button */}
+            
             <Button className="w-full h-12 text-lg font-bold shadow-lg" onClick={onSelect}>
                 Select This Room
             </Button>

@@ -72,7 +72,7 @@ const ReservationModal = ({ hotel, children }) => {
         </DialogHeader>
 
         <div className="py-4 space-y-6">
-          {/* STEP 1 */}
+         
           <div className={`p-5 rounded-2xl border ${step1Locked ? 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800' : 'bg-white dark:bg-slate-900 border-primary shadow-sm'}`}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="flex items-center gap-2 text-lg font-bold text-slate-900 dark:text-white">1. Dates & Occupancy {step1Locked && <Check className="w-5 h-5 text-green-500" />}</h3>
@@ -104,7 +104,7 @@ const ReservationModal = ({ hotel, children }) => {
             ) : <div className="text-sm font-medium text-slate-600 dark:text-slate-400">{nights} Nights • {totalGuests} Guests • {roomCount} Rooms</div>}
           </div>
 
-          {/* STEP 2 */}
+         
           <div className={`p-5 rounded-2xl border transition-all ${step2Locked ? (selectedRooms.length > 0 ? 'bg-slate-50 dark:bg-slate-900 border-green-500/30' : 'opacity-60 border-slate-200 dark:border-slate-800') : 'bg-white dark:bg-slate-900 border-primary shadow-sm'}`}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="flex items-center gap-2 text-lg font-bold text-slate-900 dark:text-white">2. Select Rooms {selectedRooms.length === parseInt(roomCount) && step2Locked && <Check className="w-5 h-5 text-green-500" />}</h3>
@@ -137,7 +137,7 @@ const ReservationModal = ({ hotel, children }) => {
             {step2Locked && selectedRooms.length > 0 && <div className="text-sm font-medium text-slate-600 dark:text-slate-400">{selectedRooms.map(r => r.title).join(", ")}</div>}
           </div>
 
-          {/* STEP 3 */}
+          
           <div className={`p-5 rounded-2xl border transition-all ${step3Locked ? 'opacity-60 border-slate-200 dark:border-slate-800' : 'bg-white dark:bg-slate-900 border-primary shadow-sm'}`}>
              <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">3. Primary Guest Details</h3>
              {!step3Locked && (

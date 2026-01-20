@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Send, Youtube } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import BrandLogo from "@/components/ui/BrandLogo";
-import { toast } from "sonner"; // Alert Library
+import { toast } from "sonner";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
 
   const handleSubscribe = () => {
     if (!email.trim()) return;
-    // In real app, call API here
     toast.success("Subscribed successfully!", {
         description: `You will receive updates at ${email}`,
         duration: 3000,
@@ -24,10 +23,10 @@ const Footer = () => {
     <footer className="pt-20 pb-10 transition-colors duration-300 border-t bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800">
       <div className="container px-4 mx-auto">
         
-        {/* Top Grid */}
+        
         <div className="grid grid-cols-1 gap-12 mb-12 md:grid-cols-2 lg:grid-cols-4">
           
-          {/* Brand Info */}
+          
           <div className="space-y-4">
             <Link to="/" className="inline-block transition-opacity hover:opacity-80">
               <BrandLogo className="text-3xl" />
@@ -37,7 +36,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Company Links */}
+          
           <div>
             <h3 className="mb-6 text-xs font-bold tracking-wider uppercase text-slate-900 dark:text-white">Company</h3>
             <ul className="space-y-3 text-sm">
@@ -48,7 +47,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Support Links */}
+          
           <div>
             <h3 className="mb-6 text-xs font-bold tracking-wider uppercase text-slate-900 dark:text-white">Support</h3>
             <ul className="space-y-3 text-sm">
@@ -59,7 +58,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          
           <div>
             <h3 className="mb-6 text-xs font-bold tracking-wider uppercase text-slate-900 dark:text-white">Stay Updated</h3>
             <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">Subscribe to our newsletter for the latest luxury deals and travel inspiration.</p>
@@ -79,23 +78,38 @@ const Footer = () => {
 
         <Separator className="mb-8 bg-slate-200 dark:bg-slate-800" />
 
-        {/* Bottom Bar */}
-        <div className="flex flex-col items-center justify-between gap-4 text-sm font-medium md:flex-row">
-          <p>© 2024 Orrio Inc. All rights reserved.</p>
+        
+        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+          <p className="text-sm font-medium text-slate-500">© 2024 Orrio Inc. All rights reserved.</p>
           
-          <div className="flex gap-6">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="transition-colors transform text-slate-400 hover:text-blue-600 hover:scale-110">
+          
+          <div className="flex items-center gap-6">
+            
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" 
+               className="transition-all transform text-slate-400 hover:text-blue-600 hover:scale-110 hover:-translate-y-1">
                 <Facebook className="w-5 h-5" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="transition-colors transform text-slate-400 hover:text-sky-500 hover:scale-110">
+            
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" 
+               className="transition-all transform text-slate-400 hover:text-sky-500 hover:scale-110 hover:-translate-y-1">
                 <Twitter className="w-5 h-5" />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="transition-colors transform text-slate-400 hover:text-pink-600 hover:scale-110">
+            
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" 
+               className="transition-all transform text-slate-400 hover:text-pink-600 hover:scale-110 hover:-translate-y-1">
                 <Instagram className="w-5 h-5" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="transition-colors transform text-slate-400 hover:text-blue-700 hover:scale-110">
+            
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" 
+               className="transition-all transform text-slate-400 hover:text-blue-700 hover:scale-110 hover:-translate-y-1">
                 <Linkedin className="w-5 h-5" />
             </a>
+
+            <a href="https://youtube.com" target="_blank" rel="noreferrer" 
+               className="transition-all transform text-slate-400 hover:text-red-600 hover:scale-110 hover:-translate-y-1">
+                <Youtube className="w-5 h-5" />
+            </a>
+
           </div>
         </div>
 

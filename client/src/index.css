@@ -4,8 +4,8 @@
  
 @layer base {
   :root {
-    --background: 0 0% 100%;       /* සුදු පාට (Light Mode) */
-    --foreground: 222.2 84% 4.9%;  /* තද කළු අකුරු */
+    --background: 0 0% 100%;       
+    --foreground: 222.2 84% 4.9%;  
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
  
-    --primary: 221.2 83.2% 53.3%;  /* අපේ Brand Blue පාට */
+    --primary: 221.2 83.2% 53.3%;  
     --primary-foreground: 210 40% 98%;
  
     --secondary: 210 40% 96.1%;
@@ -36,8 +36,8 @@
   }
  
   .dark {
-    --background: 222.2 84% 4.9%;  /* තද කළු Background (Dark Mode) */
-    --foreground: 210 40% 98%;     /* සුදු අකුරු */
+    --background: 222.2 84% 4.9%;  
+    --foreground: 210 40% 98%;     
  
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -91,5 +91,5 @@ body {
 }
 
 body {
-  @apply bg-background text-foreground transition-colors duration-300;
+  @apply transition-colors duration-300 bg-background text-foreground;
 }

@@ -1,6 +1,6 @@
 import MainLayout from "@/layouts/MainLayout";
 
-// Reusable Page Template Component
+
 const PageTemplate = ({ title, subtitle, image, children }) => (
   <MainLayout>
     <div className="relative h-[400px] flex items-center justify-center overflow-hidden pt-20">
@@ -19,7 +19,6 @@ const PageTemplate = ({ title, subtitle, image, children }) => (
   </MainLayout>
 );
 
-// --- INDIVIDUAL PAGE EXPORTS ---
 
 export const Careers = () => (
     <PageTemplate title="Join Our Team" subtitle="Build the future of travel with us." image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070">

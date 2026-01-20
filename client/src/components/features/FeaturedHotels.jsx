@@ -12,7 +12,7 @@ const FeaturedHotels = ({ hotels, loading, searchQuery, onShowAll }) => {
     <section className="py-24 transition-colors duration-300 bg-white border-t dark:bg-slate-950 border-slate-200 dark:border-slate-800">
       <div className="container px-4 mx-auto">
         
-        {/* Centered & Attractive Title */}
+        
         <div className="mb-16 space-y-4 text-center">
           <h2 className="text-4xl font-extrabold tracking-tight md:text-5xl text-slate-900 dark:text-white">
             {searchQuery ? (

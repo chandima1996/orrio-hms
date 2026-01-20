@@ -44,11 +44,11 @@ const Home = () => {
     loadAllHotels();
   }, []);
 
-  // Validation Logic
+  
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
     
-    // Only letters and spaces check
+    
     const isValid = /^[a-zA-Z\s]+$/.test(searchQuery);
     if (!isValid) {
         toast.error("Invalid Search", { description: "Please enter a valid location (Letters only)." });

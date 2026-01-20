@@ -27,12 +27,12 @@ const BookingSummary = () => {
   const [processing, setProcessing] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-  // If page accessed directly without data, show error
+ 
   if (!state) return <div className="p-20 pt-32 text-center">No booking data found. Please select a room first.</div>;
 
   const { hotelName, hotelId, selectedRooms, nights, guestDetails, guests, date } = state;
 
-  // Calculate Totals
+ 
   const roomsTotal = selectedRooms.reduce((acc, room) => acc + (room.price * nights), 0);
   const serviceCharge = 50;
   const totalAmount = roomsTotal + serviceCharge;
@@ -45,12 +45,12 @@ const BookingSummary = () => {
 
     setProcessing(true);
     
-    // --- OPTION 1: PAY NOW (STRIPE) ---
+    
     if (paymentMethod === "paynow") {
       try {
         const response = await createCheckoutSession({
             hotelId: hotelId,
-            roomId: selectedRooms[0]._id, // Note: Currently handling single room type for Stripe
+            roomId: selectedRooms[0]._id, 
             numberOfNights: nights
         });
         if (response.url) window.location.href = response.url;
@@ -61,22 +61,22 @@ const BookingSummary = () => {
       }
     } 
     
-    // --- OPTION 2: PAY LATER (SAVE TO DB) ---
+   
     else {
       try {
         await createBooking({
-            userId: user.id, // Clerk User ID
+            userId: user.id, 
             hotelId: hotelId,
-            roomId: selectedRooms[0]._id, // Handle array if expanding logic later
+            roomId: selectedRooms[0]._id, 
             checkIn: date.from,
             checkOut: date.to,
             guests: guests,
             totalAmount: totalAmount,
-            status: "pending" // Set status to pending
+            status: "pending" 
         });
         
         setProcessing(false);
-        setShowAlert(true); // Show success popup
+        setShowAlert(true); 
       } catch (error) {
         console.error("Booking Creation Error:", error);
         alert("Failed to create booking. Please try again.");
@@ -96,7 +96,7 @@ const BookingSummary = () => {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             
-            {/* --- SUMMARY CARD --- */}
+           
             <Card className="p-6 shadow-md h-fit dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                 <h2 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">{hotelName}</h2>
                 <div className="mb-6 text-sm text-slate-500">{nights} Nights Stay</div>
@@ -133,7 +133,7 @@ const BookingSummary = () => {
                 </div>
             </Card>
 
-            {/* --- PAYMENT SECTION --- */}
+            
             <div className="space-y-6">
                 <Card className="p-6 shadow-md dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                     <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">Payment Method</h3>
@@ -170,7 +170,7 @@ const BookingSummary = () => {
             </div>
         </div>
 
-        {/* --- SUCCESS ALERT (For Pay Later) --- */}
+       
         <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
             <AlertDialogContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                 <AlertDialogHeader>

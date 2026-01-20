@@ -12,7 +12,7 @@ const RoomCard = ({ room, viewMode = "list" }) => {
     navigate(`/room/${room._id}`);
   };
 
-  // --- 1. LIST VIEW (Horizontal) ---
+  
   if (isList) {
     return (
         <Card className="overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 dark:bg-slate-900/50 dark:border-slate-800 group h-[280px]">
@@ -81,7 +81,7 @@ const RoomCard = ({ room, viewMode = "list" }) => {
             </div>
         </div>
 
-        {/* Content */}
+       
         <CardContent className="flex flex-col flex-grow p-5">
             <h3 className="mb-2 text-xl font-bold transition-colors text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary">{room.title}</h3>
             

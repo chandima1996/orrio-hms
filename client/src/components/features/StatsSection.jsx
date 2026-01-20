@@ -19,7 +19,7 @@ const Counter = ({ value, suffix = "" }) => {
     });
   }, [springValue, value, suffix]);
 
-  // Changed to Gold Color (text-yellow-400)
+  
   return <span ref={ref} className="text-5xl font-extrabold text-yellow-400 md:text-6xl drop-shadow-md" />;
 };
 
@@ -52,7 +52,7 @@ const StatsSection = () => {
     <section className="py-24 transition-colors duration-300 border-t bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800">
       <div className="container px-4 mx-auto">
         
-        {/* Proper Title for Stats */}
+        
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Our Growing Impact</h2>
           <div className="w-20 h-1 mx-auto bg-yellow-400 rounded-full"></div>

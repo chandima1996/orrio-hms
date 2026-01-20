@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Backend Base URL
-const API_URL = 'http://localhost:8000/api'; // Make sure port matches your server
+const API_URL = 'http://localhost:8000/api'; 
 
 // --- HOTELS ---
 export const fetchHotels = async () => (await axios.get(`${API_URL}/hotels`)).data;
@@ -12,7 +12,7 @@ export const updateHotel = async (id, data) => (await axios.put(`${API_URL}/hote
 export const deleteHotel = async (id) => (await axios.delete(`${API_URL}/hotels/${id}`)).data;
 
 // --- ROOMS ---
-// Fetch Single Room (New for Room Details Page)
+
 export const fetchRoomById = async (id) => (await axios.get(`${API_URL}/rooms/${id}`)).data; // Backend route needed*
 export const createRoom = async (hotelId, data) => (await axios.post(`${API_URL}/rooms/${hotelId}`, data)).data;
 export const updateRoom = async (id, data) => (await axios.put(`${API_URL}/rooms/${id}`, data)).data;

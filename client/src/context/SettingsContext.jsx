@@ -8,22 +8,20 @@ const SettingsContext = createContext();
 export const SettingsProvider = ({ children }) => {
   const { user } = useUser();
   
-  // App Settings State
+ 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [currency, setCurrency] = useState("USD");
-  const [favorites, setFavorites] = useState([]); // Hotel IDs
+  const [favorites, setFavorites] = useState([]); 
   
-  // User Role State (Derived from Clerk Metadata)
-  // Default to 'user' if not set
+  
   const userRole = user?.publicMetadata?.role || "user"; 
 
-  // --- INITIALIZATION & SYNC ---
+  
   useEffect(() => {
     if (user) {
       const initUser = async () => {
         try {
-          // 1. Sync User to our Backend (MongoDB)
-          // We pass the role too, so backend knows about admins
+          
           await syncUser({
             clerkId: user.id,
             email: user.primaryEmailAddress.emailAddress,
@@ -32,7 +30,7 @@ export const SettingsProvider = ({ children }) => {
             role: userRole 
           });
           
-          // 2. Fetch User Favorites from Backend
+          
           const favs = await fetchFavorites(user.id);
           setFavorites(favs.map(h => h._id));
         } catch (error) {
@@ -41,14 +39,12 @@ export const SettingsProvider = ({ children }) => {
       };
       initUser();
     } else {
-        // Clear data on logout
+        
         setFavorites([]);
     }
-  }, [user, userRole]); // Re-run if user or role changes
+  }, [user, userRole]); 
 
-  // --- HANDLERS ---
-
-  // Favorite Toggle
+ 
   const handleToggleFavorite = async (hotelId) => {
     if (!user) {
         toast.error("Please sign in to save hotels.");
@@ -57,7 +53,7 @@ export const SettingsProvider = ({ children }) => {
 
     const isAlreadyFav = favorites.includes(hotelId);
     
-    // Optimistic Update
+    
     if (isAlreadyFav) {
         setFavorites(prev => prev.filter(id => id !== hotelId));
         toast.success("Removed from Favorites");
@@ -100,7 +96,7 @@ export const SettingsProvider = ({ children }) => {
         toggleCurrency, 
         favorites, 
         handleToggleFavorite,
-        userRole // Export Role to be used in Header
+        userRole 
       }}
     >
       {children}

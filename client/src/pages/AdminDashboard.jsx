@@ -152,7 +152,7 @@ const AdminDashboard = () => {
                     ))}</div>}
                 </TabsContent>
 
-                {/* (Rooms and Users tabs same logic as Hotels) */}
+               
                 <TabsContent value="rooms">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold dark:text-white">{viewState.room === 'list' ? 'Rooms' : (viewState.room === 'edit' ? 'Edit Room' : 'Add Room')}</h2>

@@ -25,9 +25,9 @@ const FindHotels = () => {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState("grid");
   
-  // Filters State
+ 
   const [locationFilter, setLocationFilter] = useState(urlQuery);
-  const [priceRange, setPriceRange] = useState([1000]); // Increased Default Max Price
+  const [priceRange, setPriceRange] = useState([1000]); 
   const [selectedRating, setSelectedRating] = useState(0);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [sortOption, setSortOption] = useState("recommended");
@@ -50,11 +50,11 @@ const FindHotels = () => {
     loadData();
   }, []);
 
-  // --- UPDATED FILTER LOGIC ---
+ 
   const filteredHotels = useMemo(() => {
     let result = hotels;
 
-    // 1. Location
+    
     if (locationFilter) {
       result = result.filter(h => 
         h.city.toLowerCase().includes(locationFilter.toLowerCase()) || 
@@ -63,24 +63,22 @@ const FindHotels = () => {
       );
     }
 
-    // 2. Price Filter (Starting Price Logic)
-    // Note: Backend එකෙන් Rooms populate කරලා එවන්නේ නැත්නම් මේක වැඩ නොකරන්න පුළුවන්.
-    // අපි දැනට assume කරනවා hotel object එකේ rooms තියෙනවා හෝ නැත්නම් අපි ඒක ignore කරනවා.
+    
     result = result.filter(h => {
-       // කාමර නැත්නම් පෙරන්න එපා (Pass)
+      
        if (!h.rooms || h.rooms.length === 0) return true; 
        
-       // කාමර තියෙනවා නම්, අඩුම කාමරේ මිල ගන්නවා
+      
        const minPrice = Math.min(...h.rooms.map(r => r.price || 0));
        return minPrice <= priceRange[0];
     });
 
-    // 3. Rating
+  
     if (selectedRating > 0) {
       result = result.filter(h => h.starRating >= selectedRating);
     }
 
-    // 4. Amenities
+ 
     if (selectedAmenities.length > 0) {
       result = result.filter(h => 
         selectedAmenities.every(amenity => 
@@ -89,11 +87,11 @@ const FindHotels = () => {
       );
     }
 
-    // 5. Sorting
+   
     if (sortOption === "ratingHighLow") {
       result.sort((a, b) => b.starRating - a.starRating);
     }
-    // Price sorting logic would need rooms populated too, kept simple for now.
+   
 
     return result;
   }, [hotels, locationFilter, priceRange, selectedRating, selectedAmenities, sortOption]);
