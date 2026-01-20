@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Backend Base URL
-const API_URL = 'http://localhost:8000/api'; 
+// const API_URL = 'http://localhost:8000/api'; 
+const API_URL = 'https://orrio-server.onrender.com/api'; 
 
 // --- HOTELS ---
 export const fetchHotels = async () => (await axios.get(`${API_URL}/hotels`)).data;
@@ -13,7 +14,7 @@ export const deleteHotel = async (id) => (await axios.delete(`${API_URL}/hotels/
 
 // --- ROOMS ---
 
-export const fetchRoomById = async (id) => (await axios.get(`${API_URL}/rooms/${id}`)).data; // Backend route needed*
+export const fetchRoomById = async (id) => (await axios.get(`${API_URL}/rooms/${id}`)).data; 
 export const createRoom = async (hotelId, data) => (await axios.post(`${API_URL}/rooms/${hotelId}`, data)).data;
 export const updateRoom = async (id, data) => (await axios.put(`${API_URL}/rooms/${id}`, data)).data;
 export const deleteRoom = async (id) => (await axios.delete(`${API_URL}/rooms/${id}`)).data;

@@ -12,10 +12,10 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Props වලින් lat, lng ගන්නවා
+
 const HotelMap = ({ location, lat, lng }) => {
   
-  // Default Colombo if data missing
+ 
   const position = [lat || 6.9271, lng || 79.8612]; 
 
   return (
