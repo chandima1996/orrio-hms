@@ -10,7 +10,7 @@ import BrandLogo from "@/components/ui/BrandLogo";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { theme, toggleTheme, currency, toggleCurrency } = useSettings();
+  const { theme, toggleTheme, currency, toggleCurrency, userRole } = useSettings();
   const { user } = useUser();
   const location = useLocation();
 
@@ -22,7 +22,7 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isAdmin = user?.primaryEmailAddress?.emailAddress === "admin@orrio.com";
+  const isAdmin = userRole === "admin";
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -31,13 +31,14 @@ const Header = () => {
     { name: "Contact", path: "/contact" },
   ];
 
-  // --- TRANSPARENCY LOGIC ---
-  // Transparent වෙන්නේ Home ('/') සහ Search ('/search') පිටු වල විතරයි.
-  // ඒ පිටු වලත් Scroll කරලා නැත්නම් විතරයි.
-  const isTransparentPage = location.pathname === "/" || location.pathname === "/search";
+  // Transparent Pages List
+  const isTransparentPage = [
+    "/", "/search", "/about", "/contact", 
+    "/careers", "/blog", "/help", "/terms", "/privacy", "/faq"
+  ].includes(location.pathname);
+
   const isTransparent = isTransparentPage && !isScrolled;
 
-  // Colors Logic
   const textColorClass = isTransparent 
     ? "text-white hover:text-white/80" 
     : "text-slate-700 dark:text-slate-200 hover:text-primary";
@@ -45,8 +46,6 @@ const Header = () => {
   const buttonClass = isTransparent
     ? "text-white border-white/30 hover:bg-white/10"
     : "text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800";
-
-  const logoShadow = isTransparent ? "drop-shadow-lg" : "";
 
   return (
     <motion.header
@@ -60,14 +59,12 @@ const Header = () => {
     >
       <div className="container flex items-center justify-between px-4 mx-auto">
         
-        {/* Logo */}
         <Link to="/" className="transition-opacity hover:opacity-90">
-          <div className={logoShadow}>
+          <div className={isTransparent ? "drop-shadow-lg" : ""}>
              <BrandLogo className="text-3xl md:text-4xl" />
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="items-center hidden gap-8 md:flex">
           {navLinks.map((item) => (
             <Link
@@ -81,40 +78,25 @@ const Header = () => {
           ))}
 
           <SignedIn>
-            <Link to="/dashboard/user" className={`text-sm font-bold ${textColorClass}`}>
-              Dashboard
-            </Link>
-            {isAdmin && (
-              <Link to="/dashboard/admin" className="text-sm font-bold text-red-500 hover:text-red-600 drop-shadow-md">
-                Admin
-              </Link>
+            {isAdmin ? (
+               <Link to="/dashboard/admin" className="text-sm font-bold text-red-500 hover:text-red-600 drop-shadow-md">
+                 Admin Dashboard
+               </Link>
+            ) : (
+               <Link to="/dashboard/user" className={`text-sm font-bold ${textColorClass}`}>
+                 Dashboard
+               </Link>
             )}
           </SignedIn>
         </nav>
 
-        {/* Right Side Actions */}
         <div className="items-center hidden gap-3 md:flex">
-          
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={toggleCurrency} 
-            className={`rounded-full font-bold bg-transparent transition-all border ${buttonClass}`}
-          >
+          <Button variant="outline" size="sm" onClick={toggleCurrency} className={`rounded-full font-bold bg-transparent transition-all border ${buttonClass}`}>
             {currency}
           </Button>
 
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleTheme} 
-            className={`rounded-full transition-all ${buttonClass}`}
-          >
-             {theme === 'light' ? (
-                <Moon className="w-5 h-5" />
-             ) : (
-                <Sun className={`w-5 h-5 ${isTransparent ? "text-white" : "text-yellow-500"}`} />
-             )}
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className={`rounded-full transition-all ${buttonClass}`}>
+             {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className={`w-5 h-5 ${isTransparent ? "text-white" : "text-yellow-500"}`} />}
           </Button>
 
           <SignedOut>
@@ -129,12 +111,9 @@ const Header = () => {
             </SignInButton>
           </SignedOut>
 
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
+          <SignedIn><UserButton afterSignOutUrl="/" /></SignedIn>
         </div>
 
-        {/* Mobile Menu */}
         <div className="flex items-center gap-2 md:hidden">
             <SignedIn><UserButton /></SignedIn>
             <Sheet>
@@ -162,9 +141,7 @@ const Header = () => {
                           </Button>
                       </div>
                       <SignedOut>
-                        <SignInButton mode="modal">
-                            <Button className="w-full font-bold">Sign In</Button>
-                        </SignInButton>
+                        <SignInButton mode="modal"><Button className="w-full font-bold">Sign In</Button></SignInButton>
                     </SignedOut>
                   </div>
                 </SheetContent>
